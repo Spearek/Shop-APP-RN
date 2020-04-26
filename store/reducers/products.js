@@ -1,5 +1,6 @@
 
 import PRODUCTS from '../../data/dummy-data';
+import { DELETE_PRODUCT } from '../actions/products';
 
 
 const initialState = {
@@ -8,6 +9,14 @@ const initialState = {
 }
 
 export default (state = initialState, action ) => {
-    return state
+    switch (action.type) {
+        case DELETE_PRODUCT: 
+        return {
+            ...state,
+            userProducts: state.userProducts.filter(product => product.id !== action.pid), // ponieważ filter z automatu zwraca NOWĄ tablicę
+            avaliableProducts: state.avaliableProducts.filter(product => product.id !== action.pid)
+        }
+    }
+    return state;
 };
 
