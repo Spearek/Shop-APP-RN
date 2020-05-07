@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -15,6 +15,15 @@ const EditProductScreen = props => {
     const [imageUrl, setImageUrl] = useState(editedProduct ? editedProduct.imageUrl : '');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState(editedProduct ? editedProduct.description : '');
+
+    const submitHandler = useCallback(() => {
+        console.log('Submiting!');
+    },[]);
+    
+    useEffect(() =>{
+        props.navigation.setParams({submit: submitHandler});
+
+    }, [submitHandler])
 
     return (
         <ScrollView>
@@ -46,6 +55,7 @@ const EditProductScreen = props => {
 }
 
 EditProductScreen.navigationOptions = navData => {
+    const submitFn = navData.navigation.getParam('submit');
     return {
         headerTitle: navData.navigation.getParam('productId') ? 'Edit Product' : 'Add Product',
         headerRight: (
@@ -53,9 +63,7 @@ EditProductScreen.navigationOptions = navData => {
                 <Item
                     title="Save"
                     iconName={Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'}
-                    onPress={() => {
-
-                    }} />
+                    onPress={submitFn} />
             </HeaderButtons>
         )
     }
